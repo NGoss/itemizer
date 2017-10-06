@@ -1,5 +1,5 @@
 const app = require('express')()
-var redis = require('redis).createClient(${REDIS_URL})
+var redis = require('redis').createClient(process.env.REDIS_URL)
 
 redis.on('error', function(error) {
 	console.log(error)
