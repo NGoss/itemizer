@@ -10,11 +10,11 @@ app.get('/', function (req, res) {
 })
 
 app.get('/items', function (req, res) {
-	redis.get('items')
+	res.send(redis.hgetall('items'))
 })
 
 app.get('/items/:item', function (req, res){
-	redis.hget('items', req.params.item)
+	res.send(redis.hget('items', req.params.item))
 })
 
 app.listen(3000, function (){
