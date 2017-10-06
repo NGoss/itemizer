@@ -5,10 +5,18 @@ redis.on('error', function(error) {
 	console.log(error)
 })
 
+app.get('/', function (req, res) {
+	res.send('What do you want?')
+})
+
 app.get('/items', function (req, res) {
 	redis.get('items')
 })
 
 app.get('/items/:item', function (req, res){
 	redis.hget('items', req.params.item)
+})
+
+app.listen(3000, function (){
+	console.log('Listening on port 3000...')
 })
