@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const app = require('express')()
 var redis = require('redis').createClient(process.env.REDIS_URL)
 
