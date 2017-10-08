@@ -1,6 +1,10 @@
 #!/usr/bin/env node
+const bodyParser = require('body-parser')
 const app = require('express')()
 var redis = require('redis').createClient(process.env.REDIS_URL)
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
 
 redis.on('error', function(error) {
 	console.log(error)
@@ -24,6 +28,27 @@ app.get('/items/:item', function (req, res){
 	redis.hget('items', req.params.item, function (err, reply) {
 		if (!err) {
 			res.send(reply)
+		} else {
+			res.send(err)
+		}
+	})
+})
+
+app.post('/new/', function (req, res) {
+	console.log(req.body)
+	redis.hget('items', req.body.item.name, function (err, reply) {
+		console.log(reply)
+		console.log(err)
+		if (!err) {
+			if (reply === null) {
+				redis.hset('items', req.body.item.name, JSON.stringify(req.body.item.stats), function (err, reply) {
+					if (!err) {
+						res.send('SUCCESS')
+					} else {
+						res.send(err)
+					}
+				})
+			}
 		} else {
 			res.send(err)
 		}
