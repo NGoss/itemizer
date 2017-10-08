@@ -35,10 +35,7 @@ app.get('/items/:item', function (req, res){
 })
 
 app.post('/new/', function (req, res) {
-	console.log(req.body)
 	redis.hget('items', req.body.item.name, function (err, reply) {
-		console.log(reply)
-		console.log(err)
 		if (!err) {
 			if (reply === null) {
 				redis.hset('items', req.body.item.name, JSON.stringify(req.body.item.stats), function (err, reply) {
@@ -51,6 +48,24 @@ app.post('/new/', function (req, res) {
 			}
 		} else {
 			res.send(err)
+		}
+	})
+})
+
+app.put('/update/', function (req, res) {
+	redis.hget('items', req.body.item.name, function (err, reply) {
+		if (!err) {
+			if (reply === null) {
+				res.send('Item does not exist')
+			} else {
+				redis.hset('items', req.body.item.name, JSON.stringify(req.body.item.stats), function (err, reply) {
+					if (!err) {
+						res.send('UPDATED')
+					} else {
+						res.send(err)
+					}
+				})
+			}
 		}
 	})
 })
