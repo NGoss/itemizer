@@ -17,7 +17,11 @@ app.get('/', function (req, res) {
 app.get('/items', function (req, res) {
 	redis.hgetall('items', function (err, reply) {
 		if (!err) {
-			res.send(reply)
+			var result = {}
+			for (var key in reply) {
+				result[key] = JSON.parse(reply[key])
+			}
+			res.send(result)
 		} else {
 			res.send(err)
 		}
@@ -27,7 +31,7 @@ app.get('/items', function (req, res) {
 app.get('/items/:item', function (req, res){
 	redis.hget('items', req.params.item, function (err, reply) {
 		if (!err) {
-			res.send(reply)
+			res.send(JSON.parse(reply))
 		} else {
 			res.send(err)
 		}
