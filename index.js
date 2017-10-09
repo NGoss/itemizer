@@ -45,6 +45,8 @@ app.post('/new/', function (req, res) {
 						res.send(err)
 					}
 				})
+			} else {
+				res.send('Item already exists. Use the /update endpoint.')
 			}
 		} else {
 			res.send(err)
